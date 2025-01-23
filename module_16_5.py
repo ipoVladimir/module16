@@ -42,12 +42,11 @@ from http.client import HTTPResponse
 # http://127.0.0.1:8000/docs
 
 
-from fastapi import FastAPI, Request, HTTPException, Path
+from fastapi import FastAPI, Request, HTTPException, Path, Form
 from fastapi.responses import  HTMLResponse
 from pydantic import BaseModel
 from fastapi.templating import Jinja2Templates
 from typing import Annotated, List
-
 class User(BaseModel):
     id: int
     username: str
@@ -77,12 +76,21 @@ async def get_user(
             return templates.TemplateResponse("users.html", {"request": request, "user": user})
     raise HTTPException(status_code=404, detail="Пользователь не найден")
 
+
+'''
 @app.post("/user/{username}/{age}", response_class=HTMLResponse)
 async def post_user(
         request: Request,
         username: Annotated[str, Path(min_length=3, max_length=50, patern="^[a-zA-Z_-]", description="Enter Username",
                                       examples='UrbanUser')],
-        age: Annotated[int, Path(ge=18, le=120, title="User age", description="Enter age", examples="24")]):
+        age: Annotated[int, Path(ge=18, le=120, title="User age", description="Enter age", examples="24")])->HTMLResponse:
+    new_id = max((user.id for user in users), default=0) + 1
+    new_user = User(id=new_id, username=username, age=age)
+    users.append(new_user)
+    return templates.TemplateResponse("users.html", {"request": request, "users": users})
+'''
+@app.post("/user", response_class=HTMLResponse)
+async def post_user(request: Request, username: str = Form(), age: int = Form() ):
     new_id = max((user.id for user in users), default=0) + 1
     new_user = User(id=new_id, username=username, age=age)
     users.append(new_user)
