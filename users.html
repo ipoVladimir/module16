@@ -1,5 +1,23 @@
 {% extends 'main.html'%}
 {% block crud_container %}
+<section class="container-fluid">
+    <form method="post" action="/user">
+        <div class="col-auto">
+            <div class="input-group mb-3">
+                <label for="username">Имя пользователя:</label>
+                <input type="text" id="username" name="username" value="{{username}}" class="form-control"
+                placeholder="Введите имя пользователя" aria-label="Add username"
+                aria-describedby="button-addon2" />
+                <label for="username">Возраст:</label>
+                <input type="text" id="age" name="age" value="{{age}}" class="form-control"
+                placeholder="Введите возраст" aria-label="Add age"
+                aria-describedby="button-addon2" />
+                <button class="btn btn-outline-primary" type="submit" id="button-addons2"
+                        data-mdb-ripple-color = "dark">Добавить</button>
+            </div>
+        </div>
+    </form>
+</section>
     {% if user %}
         <article class="card container fluid"></article>
         <br>
